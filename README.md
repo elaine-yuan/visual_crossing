@@ -1,2 +1,17 @@
-# visual_crossing_pipeline
-An analytics engineering pipeline that ingests raw data from Visual Crossing API to Snowflake.
+# Pipeline: Daily NY and WV Weather
+This project is a pipeline for a daily extraction of weather data in New York, NY and Morgantown, WV from the Visual Crossing API. It then loads the data to Snowflake as tables. 
+
+## Project Overview
+### Data Source
+  Data is retrieved from the Visual Crossing API: [https://www.visualcrossing.com/](https://www.visualcrossing.com/)
+
+### Directory Structure
+
+### Prerequisites
+* Python 3.12 or higher
+* A Visual Crossing API Key
+* A Snowflake account
+
+### Step-by-step Process
+
+### Key Files
