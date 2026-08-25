@@ -17,16 +17,16 @@ locations = [
 ]
 
 # api key
-api_key = os.getenv("api_key")
+api_key = os.getenv("API_KEY")
 
 # snowflake connection
 conn = snowflake.connector.connect(
-    user=os.getenv("snowflake_user"),
-    password=os.getenv("snowflake_pat"),
-    account=os.getenv("snowflake_account"),
-    warehouse=os.getenv("snowflake_warehouse"),
-    database=os.getenv("snowflake_database"),
-    schema=os.getenv("snowflake_schema")
+    user=os.getenv("SNOWFLAKE_USER"),
+    password=os.getenv("SNOWFLAKE_PAT"),
+    account=os.getenv("SNOWFLAKE_ACCOUNT"),
+    warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),
+    database=os.getenv("SNOWFLAKE_DATABASE"),
+    schema=os.getenv("SNOWFLAKE_SCHEMA")
 )
 
 print("Connected to Snowflake!")
