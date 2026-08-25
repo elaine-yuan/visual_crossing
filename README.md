@@ -8,7 +8,7 @@ This project is a pipeline for a daily extraction of weather data in New York, N
 ### Directory Structure
 
 ### Prerequisites
-* Python 3.x with pandas library installed
+* Python 3.12 with pandas library installed
 * A Visual Crossing API Key
 * Internet access for calling the API
 * A Snowflake account
