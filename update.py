@@ -159,27 +159,33 @@ print(f"Date range: {weather_df['DATETIME'].min()} → {weather_df['DATETIME'].m
 # write dataframe to snowflake
 print("Loading data into RAW_WEATHER...")
 
-success, nchunks, nrows, output = write_pandas(
-    conn,
-    weather_df,
-    "RAW_WEATHER"
-)
+try:
+    success, nchunks, nrows, output = write_pandas(
+        conn,
+        weather_df,
+        "RAW_WEATHER"
+    )
 
-# validation
-if success:
-    print()
-    print("=" * 60)
-    print("SUCCESS")
-    print("=" * 60)
+    # validation
+    if success:
+        print()
+        print("=" * 60)
+        print("SUCCESS")
+        print("=" * 60)
 
-    print(f"Rows loaded: {nrows}")
-    print(f"Chunks loaded: {nchunks}")
-    print(f"Date: {yesterday}")
-    print(f"Locations: {weather_df['LOCATION'].unique()}")
-else:
-    print("Snowflake load failed.")
-
-# close connection
-conn.close()
-
-print("Snowflake connection closed.")
+        print(f"Rows loaded: {nrows}")
+        print(f"Chunks loaded: {nchunks}")
+        print(f"Date: {yesterday}")
+        print(f"Locations: {weather_df['LOCATION'].unique()}")
+    else:
+        print("Snowflake load failed.")
+        raise Exception("write_pandas returned success=False")
+        
+except Exception as e:
+    print(f"ERROR: Failed to load data into Snowflake: {str(e)}")
+    raise
+    
+finally:
+    # close connection
+    conn.close()
+    print("Snowflake connection closed.")
