@@ -37,7 +37,7 @@ visual_crossing/
 
 | File | Description |
 |---|---|
-| `initial_load.py` | Loads historical weather data into Snowflake. |
+| `initial_load.py` | Loads weather data from 1/1/2026 through yesterday into Snowflake. |
 | `update.py` | Loads daily weather data into Snowflake. |
 | `.github/workflows/daily_update.yml` | Automates the daily data update with GitHub Actions. |
 | `requirements.txt` | Lists required Python dependencies. |
