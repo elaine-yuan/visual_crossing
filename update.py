@@ -29,6 +29,10 @@ conn = snowflake.connector.connect(
     schema=os.getenv("SNOWFLAKE_SCHEMA")
 )
 
+cursor = conn.cursor()
+cursor.execute(f"USE DATABASE {os.getenv('SNOWFLAKE_DATABASE')}")
+cursor.close()
+
 print("Connected to Snowflake!")
 
 # retrieve yesterday's data
