@@ -167,7 +167,7 @@ try:
     success, nchunks, nrows, output = write_pandas(
         conn,
         weather_df,
-        "RAW_WEATHER"
+        f"{os.getenv('SNOWFLAKE_DATABASE')}.{os.getenv('SNOWFLAKE_SCHEMA')}.RAW_WEATHER"
     )
 
     # validation
