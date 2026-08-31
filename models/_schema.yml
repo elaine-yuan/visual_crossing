@@ -1,0 +1,92 @@
+version: 2
+
+models:
+
+  - name: DIM_LOCATION
+    description: "Location dimension containing weather locations."
+
+    columns:
+      - name: LOCATIONID
+        description: "Unique identifier for each location."
+        tests:
+          - not_null
+          - unique
+
+      - name: LOCATION
+        tests:
+          - not_null
+          - unique
+
+
+  - name: INT_DAILY_WEATHER
+    description: "Daily weather observations by location."
+
+    columns:
+      - name: weather_id
+        description: "Unique identifier for each location and weather date."
+        tests:
+          - not_null
+          - unique
+
+      - name: LOCATIONID
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('DIM_LOCATION')
+                field: LOCATIONID
+
+      - name: weather_date
+        tests:
+          - not_null
+
+  - name: INT_HOURLY_WEATHER
+    description: "Hourly weather observations by location and date."
+
+    columns:
+      - name: hourly_weather_id
+        description: "Unique identifier for each location, date, and hour."
+        tests:
+          - not_null
+          - unique
+
+      - name: LOCATIONID
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('DIM_LOCATION')
+                field: LOCATIONID
+
+      - name: weather_date
+        tests:
+          - not_null
+
+      - name: weather_time
+        tests:
+          - not_null
+
+  - name: MART_WEATHER
+    description: "BI-ready hourly weather table combining hourly, daily, and location data."
+
+    columns:
+      - name: LOCATIONID
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('DIM_LOCATION')
+                field: LOCATIONID
+
+      - name: weather_date
+        tests:
+          - not_null
+
+      - name: weather_time
+        tests:
+          - not_null
+
+      - name: hourly_weather_id
+        tests:
+          - not_null
+          - unique
