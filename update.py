@@ -31,6 +31,7 @@ conn = snowflake.connector.connect(
 
 cursor = conn.cursor()
 cursor.execute(f"USE DATABASE {os.getenv('SNOWFLAKE_DATABASE')}")
+cursor.execute(f"USE SCHEMA {os.getenv('SNOWFLAKE_SCHEMA')}")
 cursor.close()
 
 print("Connected to Snowflake!")
