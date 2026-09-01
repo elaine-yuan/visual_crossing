@@ -1,9 +1,10 @@
+/*
 {{ config(
     materialized='incremental',
     unique_key='hourly_weather_id',
     incremental_strategy='merge'
 ) }}
-
+*/
 WITH flattened AS (
     SELECT
         LOCATION,
