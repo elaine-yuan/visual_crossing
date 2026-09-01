@@ -32,6 +32,50 @@ conn = snowflake.connector.connect(
 cursor = conn.cursor()
 cursor.execute(f"USE DATABASE {os.getenv('SNOWFLAKE_DATABASE')}")
 cursor.execute(f"USE SCHEMA {os.getenv('SNOWFLAKE_SCHEMA')}")
+
+# table creation
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS RAW_WEATHER (
+        DATETIME VARCHAR,
+        DATETIMEEPOCH NUMBER,
+        TEMPMAX FLOAT,
+        TEMPMIN FLOAT,
+        TEMP FLOAT,
+        FEELSLIKEMAX FLOAT,
+        FEELSLIKEMIN FLOAT,
+        FEELSLIKE FLOAT,
+        DEW FLOAT,
+        HUMIDITY FLOAT,
+        PRECIP FLOAT,
+        PRECIPPROB FLOAT,
+        PRECIPCOVER FLOAT,
+        PRECIPTYPE VARCHAR,
+        SNOW FLOAT,
+        SNOWDEPTH FLOAT,
+        WINDGUST FLOAT,
+        WINDSPEED FLOAT,
+        WINDDIR FLOAT,
+        PRESSURE FLOAT,
+        CLOUDCOVER FLOAT,
+        VISIBILITY FLOAT,
+        SOLARRADIATION FLOAT,
+        SOLARENERGY FLOAT,
+        UVINDEX FLOAT,
+        SUNRISE VARCHAR,
+        SUNRISEEPOCH NUMBER,
+        SUNSET VARCHAR,
+        SUNSETEPOCH NUMBER,
+        MOONPHASE FLOAT,
+        CONDITIONS VARCHAR,
+        DESCRIPTION VARCHAR,
+        ICON VARCHAR,
+        STATIONS VARCHAR,
+        SOURCE VARCHAR,
+        HOURS VARCHAR,
+        LOCATION VARCHAR
+    )
+""")
+
 cursor.close()
 
 print("Connected to Snowflake!")
@@ -168,7 +212,7 @@ try:
     success, nchunks, nrows, output = write_pandas(
         conn,
         weather_df,
-        f"{os.getenv('SNOWFLAKE_DATABASE')}.{os.getenv('SNOWFLAKE_SCHEMA')}.RAW_WEATHER"
+        "RAW_WEATHER"
     )
 
     # validation
