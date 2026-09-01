@@ -53,12 +53,12 @@ jobs:
             outputs:
               dev:
                 type: snowflake
-                account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
-                user: "{{ env_var('SNOWFLAKE_USER') }}"
-                password: "{{ env_var('SNOWFLAKE_PAT') }}"
-                warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
-                database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
-                schema: "{{ env_var('SNOWFLAKE_SCHEMA') }}"
+                account: $SNOWFLAKE_ACCOUNT
+                user: $SNOWFLAKE_USER
+                password: $SNOWFLAKE_PAT
+                warehouse: $SNOWFLAKE_WAREHOUSE
+                database: $SNOWFLAKE_DATABASE
+                schema: $SNOWFLAKE_SCHEMA
                 threads: 4
           EOF
 
