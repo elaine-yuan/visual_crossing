@@ -63,6 +63,6 @@ jobs:
           SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
           SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
         run: |
-          dbt debug
-          dbt deps
-          dbt build
+          dbt debug --profiles-dir ~/.dbt --profile my_new_project
+          dbt deps --profiles-dir ~/.dbt --profile my_new_project
+          dbt build --profiles-dir ~/.dbt --profile my_new_project
