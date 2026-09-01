@@ -1,3 +1,4 @@
+{{ config(materialized='table') }}
 SELECT
     LOCATIONID,
     LOCATION,
@@ -6,4 +7,4 @@ SELECT
     COUNTRY,
     LAT,
     LONG
-FROM {{ source('SNOWFLAKE', 'DIM_LOCATION') }}
+FROM {{ source('SNOWFLAKE', 'RAW_LOCATION') }}

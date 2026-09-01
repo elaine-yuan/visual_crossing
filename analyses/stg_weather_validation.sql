@@ -1,6 +1,6 @@
 --does stg_weather have one row per location per day?
 --ideal=0 rows returned
-/*
+
 SELECT
     LOCATION,
     WEATHER_DATE,
@@ -10,7 +10,7 @@ GROUP BY
     LOCATION,
     WEATHER_DATE
 HAVING COUNT(*)>1
-*/
+
 
 --is everything populating as expected?
 /*
