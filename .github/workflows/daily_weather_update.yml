@@ -23,6 +23,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install dbt-snowflake
 
       - name: Update raw weather data
         env:
@@ -37,6 +38,13 @@ jobs:
           python update.py
 
       - name: Create dbt profile
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PAT: ${{ secrets.SNOWFLAKE_PAT }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
         run: |
           mkdir -p ~/.dbt
           cat > ~/.dbt/profiles.yml << 'EOF'
@@ -63,6 +71,6 @@ jobs:
           SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
           SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
         run: |
-          dbt debug --profiles-dir ~/.dbt --profile my_new_project
-          dbt deps --profiles-dir ~/.dbt --profile my_new_project
-          dbt build --profiles-dir ~/.dbt --profile my_new_project
+          dbt debug
+          dbt deps
+          dbt build
