@@ -1,4 +1,4 @@
---does fact_hourly_weather have one row per location per day per hour?
+--does mart_weather have one row per location per day per hour?
 --ideal=0 rows returned
 /*
 SELECT
@@ -14,10 +14,10 @@ GROUP BY
 HAVING COUNT(*)>1
 */
 
---do the number of records match between fact_hourly_weather and mart_weather?
+--do the number of records match between int_hourly_weather and mart_weather?
 /*
 SELECT COUNT(*) AS hourly_rows
-FROM FACT_HOURLY_WEATHER
+FROM INT_HOURLY_WEATHER
 */
 --11470 - last date 8/27
 
@@ -35,7 +35,7 @@ SELECT
     COUNT(*) AS hourly_rows,
     MIN(f.WEATHER_DATE) AS first_date,
     MAX(f.WEATHER_DATE) AS last_date
-FROM FACT_HOURLY_WEATHER f
+FROM INT_HOURLY_WEATHER f
 JOIN DIM_LOCATION d
 ON f.LOCATIONID = d.LOCATIONID
 GROUP BY d.LOCATION

@@ -39,7 +39,7 @@ models:
   my_new_project:
 
     _stg:
-      +materialized: incremental
+      +materialized: table
 
     _int:
       +materialized: table

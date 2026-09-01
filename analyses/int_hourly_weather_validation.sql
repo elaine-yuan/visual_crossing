@@ -1,4 +1,4 @@
---does fact_hourly_weather have one row per location per day per hour?
+--does int_hourly_weather have one row per location per day per hour?
 --ideal=0 rows returned
 /*
 SELECT
@@ -6,7 +6,7 @@ SELECT
     f.WEATHER_DATE,
     f.WEATHER_TIME,
     COUNT(*) AS row_count
-FROM FACT_HOURLY_WEATHER f
+FROM INT_HOURLY_WEATHER f
 GROUP BY
     f.LOCATIONID,
     f.WEATHER_DATE,
@@ -21,7 +21,7 @@ SELECT
     LOCATIONID,
     WEATHER_DATE,
     COUNT(*) AS hourly_records
-FROM FACT_HOURLY_WEATHER
+FROM INT_HOURLY_WEATHER
 GROUP BY
     LOCATIONID,
     WEATHER_DATE
@@ -31,8 +31,7 @@ ORDER BY
 */
 
 --general preview
-/*
+
 SELECT *
-FROM FACT_HOURLY_WEATHER
+FROM INT_HOURLY_WEATHER
 ORDER BY WEATHER_DATE DESC, WEATHER_TIME ASC
-*/
