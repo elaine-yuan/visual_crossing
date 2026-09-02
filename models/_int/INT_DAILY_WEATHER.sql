@@ -4,6 +4,46 @@
     incremental_strategy='merge'
 ) }}
 
+WITH weather AS (
+    SELECT
+        DATETIME,
+        DATETIME::DATE AS weather_date,
+        LOCATION,
+        TEMPMAX,
+        TEMPMIN,
+        TEMP,
+        FEELSLIKEMAX,
+        FEELSLIKEMIN,
+        FEELSLIKE,
+        DEW,
+        HUMIDITY,
+        PRECIP,
+        PRECIPPROB,
+        PRECIPCOVER,
+        SNOW,
+        SNOWDEPTH,
+        WINDGUST,
+        WINDSPEED,
+        WINDDIR,
+        PRESSURE,
+        CLOUDCOVER,
+        VISIBILITY,
+        SOLARRADIATION,
+        SOLARENERGY,
+        UVINDEX,
+        SUNRISE,
+        SUNSET,
+        MOONPHASE,
+        CONDITIONS,
+        DESCRIPTION,
+        ICON
+    FROM {{ source('SNOWFLAKE', 'RAW_WEATHER') }}
+    QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY LOCATION, DATETIME::DATE
+    ORDER BY DATETIME DESC
+) = 1
+)
+
 SELECT
     {{ dbt_utils.generate_surrogate_key([
         'w.weather_date',
@@ -38,10 +78,9 @@ SELECT
     w.MOONPHASE,
     w.CONDITIONS,
     w.DESCRIPTION,
-    w.ICON,
-    w.SOURCE
-FROM {{ ref('STG_WEATHER') }} w
-LEFT JOIN {{ ref('DIM_LOCATION') }} l
+    w.ICON
+FROM weather AS w
+LEFT JOIN {{ source('SNOWFLAKE', 'DIM_LOCATION') }} AS l
 ON w.LOCATION = l.LOCATION
 
 {% if is_incremental() %}
@@ -49,9 +88,5 @@ WHERE w.weather_date >= (
     SELECT MAX(weather_date)
     FROM {{ this }}
 )
-{% endif %}
 
-QUALIFY ROW_NUMBER() OVER (
-    PARTITION BY w.weather_date, w.location
-    ORDER BY w.weather_date DESC
-) = 1
+{% endif %}

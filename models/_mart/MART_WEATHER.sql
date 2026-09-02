@@ -1,8 +1,9 @@
 {{ config(materialized='table') }}
+
 SELECT
-    --key
+    -- key
     h.hourly_weather_id,
-    --location
+    -- location fields
     l.LOCATIONID,
     l.LOCATION,
     l.CITY,
@@ -10,11 +11,11 @@ SELECT
     l.COUNTRY,
     l.LAT,
     l.LONG,
-    --date and time fields
+    -- date and time fields
     h.weather_date,
     h.weather_time,
     h.datetime_epoch,
-    --daily weather
+    -- daily weather
     d.TEMPMAX AS DAILY_TEMPMAX,
     d.TEMPMIN AS DAILY_TEMPMIN,
     d.TEMP AS DAILY_TEMP,
@@ -43,7 +44,7 @@ SELECT
     d.CONDITIONS AS DAILY_CONDITIONS,
     d.DESCRIPTION AS DAILY_DESCRIPTION,
     d.ICON AS DAILY_ICON,
-    --hourly weather
+    -- hourly weather
     h.TEMP AS HOURLY_TEMP,
     h.FEELSLIKE AS HOURLY_FEELSLIKE,
     h.DEW AS HOURLY_DEW,
@@ -62,9 +63,9 @@ SELECT
     h.WINDSPEED AS HOURLY_WIND_SPEED,
     h.CONDITIONS AS HOURLY_CONDITIONS,
     h.ICON AS HOURLY_ICON
-FROM {{ ref('INT_HOURLY_WEATHER') }} h
-LEFT JOIN {{ ref('INT_DAILY_WEATHER') }} d
-    ON h.LOCATIONID = d.LOCATIONID
-    AND h.weather_date = d.weather_date
-LEFT JOIN {{ ref('DIM_LOCATION') }} l
-    ON h.LOCATIONID = l.LOCATIONID
+FROM {{ ref('INT_HOURLY_WEATHER') }} AS h
+LEFT JOIN {{ ref('INT_DAILY_WEATHER') }} AS d
+ON h.LOCATIONID = d.LOCATIONID
+AND h.weather_date = d.weather_date
+LEFT JOIN {{ source('SNOWFLAKE', 'DIM_LOCATION') }} AS l
+ON h.LOCATIONID = l.LOCATIONID

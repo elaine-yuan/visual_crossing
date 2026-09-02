@@ -7,4 +7,4 @@ sources:
 
     tables:
       - name: RAW_WEATHER
-      - name: RAW_LOCATION
+      - name: DIM_LOCATION
