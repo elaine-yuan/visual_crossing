@@ -64,7 +64,7 @@ jobs:
 
       - name: Run dbt
         env:
-          DBT_PROFILES_DIR: ~/.dbt
+          DBT_PROFILES_DIR: ${{ env.HOME }}/.dbt
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
           SNOWFLAKE_PAT: ${{ secrets.SNOWFLAKE_PAT }}
