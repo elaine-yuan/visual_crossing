@@ -2,22 +2,6 @@ version: 2
 
 models:
 
-  - name: DIM_LOCATION
-    description: "Location dimension containing weather locations."
-
-    columns:
-      - name: LOCATIONID
-        description: "Unique identifier for each location."
-        tests:
-          - not_null
-          - unique
-
-      - name: LOCATION
-        tests:
-          - not_null
-          - unique
-
-
   - name: INT_DAILY_WEATHER
     description: "Daily weather observations by location."
 
@@ -28,15 +12,11 @@ models:
           - not_null
           - unique
 
-      - name: LOCATIONID
+      - name: weather_date
         tests:
           - not_null
-          - relationships:
-              arguments:
-                to: ref('DIM_LOCATION')
-                field: LOCATIONID
 
-      - name: weather_date
+      - name: locationid
         tests:
           - not_null
 
@@ -50,19 +30,15 @@ models:
           - not_null
           - unique
 
-      - name: LOCATIONID
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('DIM_LOCATION')
-                field: LOCATIONID
-
       - name: weather_date
         tests:
           - not_null
 
       - name: weather_time
+        tests:
+          - not_null
+
+      - name: locationid
         tests:
           - not_null
 
@@ -75,7 +51,7 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: ref('DIM_LOCATION')
+                to: "{{ source('SNOWFLAKE', 'DIM_LOCATION') }}"
                 field: LOCATIONID
 
       - name: weather_date
@@ -90,3 +66,7 @@ models:
         tests:
           - not_null
           - unique
+
+      - name: daily_temp
+        tests:
+          - not_null
