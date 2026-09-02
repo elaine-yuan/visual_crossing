@@ -1,10 +1,9 @@
-/*
 {{ config(
     materialized='incremental',
     unique_key='weather_id',
     incremental_strategy='merge'
 ) }}
-*/
+
 SELECT
     {{ dbt_utils.generate_surrogate_key([
         'w.weather_date',
@@ -44,15 +43,15 @@ SELECT
 FROM {{ ref('STG_WEATHER') }} w
 LEFT JOIN {{ ref('DIM_LOCATION') }} l
 ON w.LOCATION = l.LOCATION
-QUALIFY ROW_NUMBER() OVER (
-    PARTITION BY w.weather_date, w.location
-    ORDER BY w.weather_date
-) = 1
-/*
+
 {% if is_incremental() %}
 WHERE w.weather_date >= (
     SELECT MAX(weather_date)
     FROM {{ this }}
 )
 {% endif %}
-*/
+
+QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY w.weather_date, w.location
+    ORDER BY w.weather_date DESC
+) = 1
