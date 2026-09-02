@@ -62,9 +62,24 @@ jobs:
                 threads: 4
           EOF
 
+      - name: Verify dbt profile
+        run: |
+          test -f ~/.dbt/profiles.yml
+          echo "dbt profile created successfully"
+
+      - name: Test dbt connection
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PAT: ${{ secrets.SNOWFLAKE_PAT }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+        run: |
+          dbt debug --profiles-dir ~/.dbt
+          
       - name: Run dbt
         env:
-          DBT_PROFILES_DIR: ${{ env.HOME }}/.dbt
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
           SNOWFLAKE_PAT: ${{ secrets.SNOWFLAKE_PAT }}
@@ -73,4 +88,4 @@ jobs:
           SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
         run: |
           dbt deps
-          dbt build
+          dbt build --profiles-dir ~/.dbt
