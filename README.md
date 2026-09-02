@@ -19,9 +19,6 @@ visual_crossing/
 │       └── daily_weather_update.yml
 │
 ├── models/
-│   ├── _staging/
-│   │   ├── STG_WEATHER.sql
-│   │
 │   ├── _int/
 │   │   └── INT_DAILY_WEATHER.sql
 │   │   └── INT_HOURLY_WEATHER.sql
@@ -56,7 +53,6 @@ visual_crossing/
 3. **Load** – Weather data is loaded into Snowflake.
 4. **Automate** – GitHub Actions runs the daily update script to load new weather data.
 5. **Model** – dbt transforms the raw Snowflake data into BI-ready models:
-    * STG_WEATHER prepares the raw weather data for downstream transformations.
     * INT_DAILY_WEATHER combines the daily weather information with location data.
     * INT_HOURLY_WEATHER contains the flattened hourly weather observations.
     * MART_WEATHER is the final analytics-ready model. It contains daily, hourly, and location information.
@@ -91,9 +87,8 @@ dbt build
 | `packages.yml` | Defines dbt package dependencies, including `dbt-utils`. |
 | `profiles.yml` | Defines the dbt Snowflake connection configuration using environment variables. |
 | `models/schema.yml` | Contains dbt model documentation and data quality tests. |
-| `models/_staging/STG_WEATHER.sql` | Stages and prepares daily weather data from the raw Snowflake source. |
-| `models/_int/INT_DAILY_WEATHER.sql` | Performs intermediate transformations on daily weather data. |
-| `models/_int/INT_HOURLY_WEATHER.sql` |  Flattens the nested hourly weather data from the Visual Crossing API into individual records. |
+| `models/_int/INT_DAILY_WEATHER.sql` | Stages and prepares daily weather data from the raw Snowflake source. |
+| `models/_int/INT_HOURLY_WEATHER.sql` |  Flattens the nested hourly weather data into individual records. |
 | `models/_marts/MART_WEATHER.sql` | Combines the modeled data into the final BI-ready weather dataset. |
 | `requirements.txt` | Lists the Python and dbt dependencies required by the project. |
 | `README.md` | Provides documentation for the project, pipeline architecture, setup, and usage. |
