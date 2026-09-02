@@ -1,10 +1,9 @@
-/*
 {{ config(
     materialized='incremental',
     unique_key='hourly_weather_id',
     incremental_strategy='merge'
 ) }}
-*/
+
 WITH flattened AS (
     SELECT
         LOCATION,
@@ -15,12 +14,14 @@ WITH flattened AS (
         INPUT => HOURS
     ) f
     {% if is_incremental() %}
+
     WHERE weather_date >= (
         SELECT MAX(weather_date)
         FROM {{ this }}
     )
     {% endif %}
 )
+
 SELECT
     {{ dbt_utils.generate_surrogate_key([
         'fl.LOCATION',
@@ -52,4 +53,4 @@ SELECT
     fl.hour_data:source::STRING AS source
 FROM flattened fl
 LEFT JOIN {{ ref('DIM_LOCATION') }} l
-    ON fl.LOCATION = l.LOCATION
+ ON fl.LOCATION = l.LOCATION
