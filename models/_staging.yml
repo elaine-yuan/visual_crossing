@@ -7,4 +7,3 @@ sources:
 
     tables:
       - name: RAW_WEATHER
-      - name: DIM_LOCATION
