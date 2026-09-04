@@ -15,9 +15,6 @@ SELECT
     dd.date_id,
     h.weather_date,
     h.weather_time,
-    dd.day,
-    dd.month,
-    dd.year,
     dd.day_name,
     dd.is_weekday,
     -- daily weather
