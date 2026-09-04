@@ -16,10 +16,6 @@ models:
         tests:
           - not_null
 
-      - name: locationid
-        tests:
-          - not_null
-
   - name: INT_HOURLY_WEATHER
     description: "Hourly weather observations by location and date."
 
@@ -38,10 +34,6 @@ models:
         tests:
           - not_null
 
-      - name: locationid
-        tests:
-          - not_null
-
   - name: MART_WEATHER
     description: "BI-ready hourly weather table combining hourly, daily, and location data."
 
@@ -51,8 +43,16 @@ models:
           - not_null
           - relationships:
               arguments:
-                to: "{{ source('SNOWFLAKE', 'DIM_LOCATION') }}"
+                to: "{{ ref('DIM_LOCATION') }}"
                 field: LOCATIONID
+
+      - name: date_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: "{{ ref('DIM_DATE') }}"
+                field: date_id
 
       - name: weather_date
         tests:

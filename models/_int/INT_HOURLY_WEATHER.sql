@@ -50,7 +50,7 @@ SELECT
         'd.weather_date',
         'd.hour_data:datetime::string'
     ]) }} AS hourly_weather_id,
-    l.LOCATIONID,
+    d.LOCATION,
     d.weather_date,
     d.hour_data:datetime::TIME AS weather_time,
     d.hour_data:datetimeEpoch::INTEGER AS datetime_epoch,
@@ -74,5 +74,3 @@ SELECT
     d.hour_data:icon::STRING AS icon,
     d.hour_data:source::STRING AS source
 FROM deduplicated AS d
-LEFT JOIN {{ source('SNOWFLAKE', 'DIM_LOCATION') }} AS l
-ON d.LOCATION = l.LOCATION

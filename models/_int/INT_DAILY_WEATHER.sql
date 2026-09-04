@@ -49,7 +49,7 @@ SELECT
         'w.weather_date',
         'w.location'
     ]) }} AS weather_id,
-    l.LOCATIONID,
+    w.LOCATION,
     w.weather_date,
     w.TEMPMAX,
     w.TEMPMIN,
@@ -80,8 +80,6 @@ SELECT
     w.DESCRIPTION,
     w.ICON
 FROM weather AS w
-LEFT JOIN {{ source('SNOWFLAKE', 'DIM_LOCATION') }} AS l
-ON w.LOCATION = l.LOCATION
 
 {% if is_incremental() %}
 WHERE w.weather_date >= (

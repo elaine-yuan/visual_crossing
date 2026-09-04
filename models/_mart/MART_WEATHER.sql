@@ -12,9 +12,11 @@ SELECT
     l.LAT,
     l.LONG,
     -- date and time fields
+    dd.date_id,
     h.weather_date,
     h.weather_time,
-    h.datetime_epoch,
+    dd.day_name,
+    dd.is_weekday,
     -- daily weather
     d.TEMPMAX AS DAILY_TEMPMAX,
     d.TEMPMIN AS DAILY_TEMPMIN,
@@ -65,7 +67,9 @@ SELECT
     h.ICON AS HOURLY_ICON
 FROM {{ ref('INT_HOURLY_WEATHER') }} AS h
 LEFT JOIN {{ ref('INT_DAILY_WEATHER') }} AS d
-ON h.LOCATIONID = d.LOCATIONID
+ON h.LOCATION = d.LOCATION
 AND h.weather_date = d.weather_date
-LEFT JOIN {{ source('SNOWFLAKE', 'DIM_LOCATION') }} AS l
-ON h.LOCATIONID = l.LOCATIONID
+LEFT JOIN {{ ref('DIM_LOCATION') }} AS l
+ON h.LOCATION = l.LOCATION
+LEFT JOIN {{ ref('DIM_DATE') }} AS dd
+ON d.weather_date = dd.weather_date
