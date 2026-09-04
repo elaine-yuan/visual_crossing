@@ -249,22 +249,18 @@ Finally, the Snowflake connection is closed after the data load completes.
 
 ### dbt Data Modeling
 After the raw weather data is loaded into Snowflake, dbt transforms the source data into analytics-ready models.
-<details>
-<summary>Model Layers</summary>
+
+#### Model Layers
   
 * `INT_DAILY_WEATHER` creates one record per location and weather date
 * `INT_HOURLY_WEATHER` flattens the nested hourly weather data into individual hourly records
 * `MART_WEATHER` combines hourly, daily, and location data into a BI-ready dataset
-</details>
 
-<details>
-<summary>Surrogate Keys</summary>
+#### Surrogate Keys
   
 Surrogate keys are generated using `dbt_utils.generate_surrogate_key()` to uniquely identify daily and hourly weather records.
-</details>
 
-<details>
-<summary>Data Quality</summary>
+#### Data Quality
   
 dbt tests are used to validate the modeled data, including:
 * not null tests
@@ -272,4 +268,53 @@ dbt tests are used to validate the modeled data, including:
 * relationship test between `MART_WEATHER` and `DIM_LOCATION`
 
 These tests help ensure that the final `MART_WEATHER` dataset is reliable for downstream BI use.
-</details>
+
+### GitHub Actions and Automation
+The pipeline is automated using GitHub Actions, allowing the weather data to be updated without manually running the Python or dbt commands. The workflow is defined in `.github/workflows/daily_weather_update.yml`
+
+#### Workflow Schedule
+The workflow runs automatically once a day using a GitHub Actions cron schedule on 11:07 UTC or 7:07 EST:
+```text
+on:
+  schedule:
+    - cron: '07 11 * * *'
+```
+
+There is also a `workflow_dispatch`, which allows the workflow to be manually triggered from GitHub when needed.
+
+#### Workflow Steps
+The automated workflow performs the following steps:
+1. Check out the repository from GitHub
+2. Set up Python
+    * uses Python 3.12
+    * installs dependencies listed in `requirements.txt`
+    * installs `dbt-snowflake` for the dbt transformation step
+4. Update raw weather data
+    * runs `update.py`
+    * retrieves the previous day's weather data from the Visual Crossing API
+    * loads the results into the `RAW_WEATHER` table in Snowflake
+6. Create the dbt profile
+    * creates a temporary `profiles.yml` file
+    * the Snowflake connection is configured to write dbt models to the `dbt_eyuan` schema  
+8. Verify the dbt connection
+    * runs `dbt debug` to confirm that dbt can connect successfully to Snowflake before running the transformations
+10. Run dbt
+    * runs `dbt deps` to install dbt package dependencies
+    * runs `dbt build` to update the dbt models and executive associated data quality tests
+
+#### Secrets Management
+API and Snowflake credentials are stored as GitHub Actions Secrets, rather than being included directly in the source code.
+The workflow accesses these values through environment variables:
+```text
+          API_KEY: ${{ secrets.API_KEY }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PAT: ${{ secrets.SNOWFLAKE_PAT }}
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+```
+
+#### Failure Handling
+Each stage of the workflow must complete successfully before the next stage runs. For example, `update.py` raises an exception if the API request or Snowflake load fails. Similarly, `dbt build` will fail if the dbt models or data quality tests fail.
+
+This allows GitHub Actions to identify unsuccessful pipeline runs and provides a record of each run.
