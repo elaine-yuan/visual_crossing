@@ -254,18 +254,18 @@ After the raw weather data is loaded into Snowflake, dbt transforms the source d
   
 * `INT_DAILY_WEATHER` creates one record per location and weather date
 * `INT_HOURLY_WEATHER` flattens the nested hourly weather data into individual hourly records
-* `MART_WEATHER` combines hourly, daily, and location data into a BI-ready dataset
+* `MART_WEATHER` combines hourly, daily, date, and location data into a BI-ready dataset
 
 #### Surrogate Keys
   
-Surrogate keys are generated using `dbt_utils.generate_surrogate_key()` to uniquely identify daily and hourly weather records.
+Surrogate keys are generated using `dbt_utils.generate_surrogate_key()` to uniquely identify daily and hourly weather records, as well as date records.
 
 #### Data Quality
   
 dbt tests are used to validate the modeled data, including:
 * not null tests
 * unique tests
-* relationship test between `MART_WEATHER` and `DIM_LOCATION`
+* relationship test between `MART_WEATHER` and dimension tables, like 'DIM_LOCATION' and 'DIM_DATE'
 
 These tests help ensure that the final `MART_WEATHER` dataset is reliable for downstream BI use.
 
@@ -289,16 +289,16 @@ The automated workflow performs the following steps:
     * uses Python 3.12
     * installs dependencies listed in `requirements.txt`
     * installs `dbt-snowflake` for the dbt transformation step
-4. Update raw weather data
+3. Update raw weather data
     * runs `update.py`
     * retrieves the previous day's weather data from the Visual Crossing API
     * loads the results into the `RAW_WEATHER` table in Snowflake
-6. Create the dbt profile
+4. Create the dbt profile
     * creates a temporary `profiles.yml` file
     * the Snowflake connection is configured to write dbt models to the `dbt_eyuan` schema  
-8. Verify the dbt connection
+5. Verify the dbt connection
     * runs `dbt debug` to confirm that dbt can connect successfully to Snowflake before running the transformations
-10. Run dbt
+6. Run dbt
     * runs `dbt deps` to install dbt package dependencies
     * runs `dbt build` to update the dbt models and executive associated data quality tests
 
