@@ -82,7 +82,10 @@ conn = snowflake.connector.connect(
     schema=os.getenv("SNOWFLAKE_SCHEMA")
 )
 ```
+</details>
 
+<details>
+<summary>API Extraction</summary>
 The script is configured to retrieve weather data for two locations:
 
 ```python
@@ -91,11 +94,6 @@ locations = [
     "New York, NY"
 ]
 ```
-
-</details>
-
-<details>
-<summary>API Extraction</summary>
 
 The script calculates yesterday's date and uses it as both the start and end date for the API request.
 
@@ -203,7 +201,7 @@ These checks help confirm that:
 <details>
 <summary>Load to Snowflake</summary>
 
-The final data frame is loaded into the `RAW_WEATHER` table using Snowflake's `write_pandas()` function.
+The final data frame is loaded into the `RAW_WEATHER` table using the `write_pandas()` function.
 
 ```python
 try:
