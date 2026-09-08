@@ -263,7 +263,7 @@ Surrogate keys are generated using `dbt_utils.generate_surrogate_key()` to uniqu
 dbt tests are used to validate the modeled data, including:
 * not null tests
 * unique tests
-* relationship test between `MART_WEATHER` and dimension tables, like 'DIM_LOCATION' and 'DIM_DATE'
+* relationship test between `MART_WEATHER` and dimension tables, like `DIM_LOCATION` and `DIM_DATE`
 
 These tests help ensure that the final `MART_WEATHER` dataset is reliable for downstream BI use.
 
