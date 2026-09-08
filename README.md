@@ -1,7 +1,7 @@
 # Pipeline: Daily NY and WV Weather
 This project is an automated pipeline that extracts daily weather data for New York, NY and Morgantown, WV from the Visual Crossing API, loads the data into **Snowflake**, and uses **dbt** to transform it into analytics-ready models for BI.
 
-The pipeline runs automatically each day using **GitHub Actions**, with **[cron.job.org](https://cron-job.org/en/)** used to trigger the workflow.
+The pipeline runs automatically each day using **GitHub Actions**, with **[cron-job.org](https://cron-job.org/en/)** used to trigger the workflow.
 
 ## Project Overview
 The pipeline follows this workflow:
