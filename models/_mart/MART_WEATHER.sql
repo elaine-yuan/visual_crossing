@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 SELECT
     -- key
     h.hourly_weather_id,
