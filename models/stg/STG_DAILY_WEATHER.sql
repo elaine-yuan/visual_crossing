@@ -4,7 +4,7 @@
     incremental_strategy='merge'
 ) }}
 
-WITH weather AS (
+WITH deduplicated AS (
     SELECT
         DATETIME,
         DATETIME::DATE AS weather_date,
@@ -46,43 +46,43 @@ WITH weather AS (
 
 SELECT
     {{ dbt_utils.generate_surrogate_key([
-        'w.weather_date',
-        'w.location'
+        'd.weather_date',
+        'd.location'
     ]) }} AS weather_id,
-    w.LOCATION,
-    w.weather_date,
-    w.TEMPMAX,
-    w.TEMPMIN,
-    w.TEMP,
-    w.FEELSLIKEMAX,
-    w.FEELSLIKEMIN,
-    w.FEELSLIKE,
-    w.DEW,
-    w.HUMIDITY,
-    w.PRECIP,
-    w.PRECIPPROB,
-    w.PRECIPCOVER,
-    w.SNOW,
-    w.SNOWDEPTH,
-    w.WINDGUST,
-    w.WINDSPEED,
-    w.WINDDIR,
-    w.PRESSURE,
-    w.CLOUDCOVER,
-    w.VISIBILITY,
-    w.SOLARRADIATION,
-    w.SOLARENERGY,
-    w.UVINDEX,
-    w.SUNRISE,
-    w.SUNSET,
-    w.MOONPHASE,
-    w.CONDITIONS,
-    w.DESCRIPTION,
-    w.ICON
-FROM weather AS w
+    d.LOCATION,
+    d.weather_date,
+    d.TEMPMAX,
+    d.TEMPMIN,
+    d.TEMP,
+    d.FEELSLIKEMAX,
+    d.FEELSLIKEMIN,
+    d.FEELSLIKE,
+    d.DEW,
+    d.HUMIDITY,
+    d.PRECIP,
+    d.PRECIPPROB,
+    d.PRECIPCOVER,
+    d.SNOW,
+    d.SNOWDEPTH,
+    d.WINDGUST,
+    d.WINDSPEED,
+    d.WINDDIR,
+    d.PRESSURE,
+    d.CLOUDCOVER,
+    d.VISIBILITY,
+    d.SOLARRADIATION,
+    d.SOLARENERGY,
+    d.UVINDEX,
+    d.SUNRISE,
+    d.SUNSET,
+    d.MOONPHASE,
+    d.CONDITIONS,
+    d.DESCRIPTION,
+    d.ICON
+FROM deduplicated AS d
 
 {% if is_incremental() %}
-WHERE w.weather_date >= (
+WHERE d.weather_date >= (
     SELECT MAX(weather_date)
     FROM {{ this }}
 )

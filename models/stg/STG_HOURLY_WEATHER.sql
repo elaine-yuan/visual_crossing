@@ -29,6 +29,7 @@ flattened AS (
         INPUT => w.HOURS
     ) AS f
 ),
+
 deduplicated AS (
     SELECT
         LOCATION,
